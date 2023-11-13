@@ -16,20 +16,35 @@ namespace Vanks
     public class BulletController : MonoBehaviour
     {
         public float startSpeed = 100;
-        private Rigidbody _rigidbody;
+        public Rigidbody _rigidbody;
         public BulletType bulletType;
         public float damageValue;
+        public float timerSet = 2;
+        private float timer;
 
-        void Start()
+        private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _rigidbody.useGravity = false;
-            _rigidbody.velocity = transform.forward * startSpeed;
-            Destroy(gameObject, 5);
+        }
+
+        void OnEnable()
+        {
+            timer = timerSet;
+        }
+
+        void OnDisable()
+        {
+            _rigidbody.velocity = Vector3.zero;
         }
 
         void Update()
         {
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                BulletPool.Instance.Release(gameObject);
+            }
         }
 
         private void OnCollisionEnter(Collision other)
@@ -51,9 +66,11 @@ namespace Vanks
                     }
 
                     break;
+                default:
+                    break;
             }
 
-            Destroy(gameObject);
+            BulletPool.Instance.Release(gameObject);
         }
     }
 }

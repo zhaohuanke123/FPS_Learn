@@ -68,14 +68,19 @@ namespace Vanks.FPS
             {
                 if (bulletStartPoint && bulletPrefab)
                 {
-                    GameObject newBullet =
-                        Instantiate(bulletPrefab, bulletStartPoint.position, bulletStartPoint.rotation);
+                    GameObject newBullet = BulletPool.Instance.Get();
+                    // Instantiate(bulletPrefab, bulletStartPoint.position, bulletStartPoint.rotation);
+                    newBullet.transform.position = bulletStartPoint.position;
+                    newBullet.transform.rotation = bulletStartPoint.rotation;
+                    BulletController bulletController = newBullet.GetComponent<BulletController>();
+                    bulletController._rigidbody.velocity = bulletStartPoint.forward * bulletController.startSpeed;
+                    bulletController.bulletType = BulletType.Player;
                     PlayShotAudio();
-                    newBullet.GetComponent<BulletController>().bulletType = BulletType.Player;
 
                     StopCoroutine("WeaponBackAnimation");
                     StartCoroutine("WeaponBackAnimation");
                 }
+
 
                 yield return new WaitForSeconds(fireInterval);
             }

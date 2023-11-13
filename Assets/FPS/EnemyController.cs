@@ -73,8 +73,12 @@ namespace Vanks.FPS
             while (isFire)
             {
                 Quaternion rotate = Quaternion.LookRotation(direction);
-                GameObject newBullet = Instantiate(bullet, bulletSpawnPoint.transform.position, rotate);
-                newBullet.GetComponent<BulletController>().bulletType = BulletType.Enemy;
+                GameObject newBullet = BulletPool.Instance.Get();
+                newBullet.transform.position = bulletSpawnPoint.position;
+                newBullet.transform.rotation = rotate;
+                BulletController bulletController = newBullet.GetComponent<BulletController>();
+                bulletController.bulletType = BulletType.Enemy;
+                bulletController._rigidbody.velocity = direction * bulletController.startSpeed;
 
                 yield return new WaitForSeconds(fireInterval);
             }

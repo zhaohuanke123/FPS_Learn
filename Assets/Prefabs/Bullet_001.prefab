@@ -104,8 +104,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startSpeed: 100
+  _rigidbody: {fileID: 0}
   bulletType: 0
   damageValue: 10
+  timerSet: 2
 --- !u!54 &8611967942327915091
 Rigidbody:
   m_ObjectHideFlags: 0
